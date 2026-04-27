@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h2 class="page-title">Gestion des Solutions</h2>
+  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+</div>
+
+<p-table [value]="solutions" [paginator]="true" [rows]="10"
+         styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-s>
+    <tr>
+      <td>{{ s.nom }}</td>
+      <td>{{ s.description }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="openEdit(s)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" (click)="delete(s.idSolution)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr><td colspan="3" style="text-align:center">Aucune solution trouvée</td></tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="showDialog"
+          [header]="editMode ? 'Modifier Solution' : 'Nouvelle Solution'"
+          [modal]="true" [style]="{width:'450px'}">
+  <div class="dialog-form">
+    <div class="field">
+      <label>Nom *</label>
+      <input pInputText [(ngModel)]="form.nom" placeholder="Nom de la solution" />
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <input pInputText [(ngModel)]="form.description" placeholder="Description..." />
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Annuler" class="p-button-text" (click)="showDialog=false"></button>
+    <button pButton label="Enregistrer" (click)="save()"></button>
+  </ng-template>
+</p-dialog>

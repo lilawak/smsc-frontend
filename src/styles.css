@@ -1,0 +1,26 @@
+@import "primeicons/primeicons.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}

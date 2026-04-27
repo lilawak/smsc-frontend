@@ -1,0 +1,5 @@
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.dialog-form { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: #555; }
+.field input { width: 100%; }

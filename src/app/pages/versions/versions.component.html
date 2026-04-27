@@ -1,0 +1,89 @@
+<div class="page-header">
+  <h2 class="page-title">Gestion des Versions</h2>
+  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+</div>
+
+<p-table [value]="versions" [paginator]="true" [rows]="10"
+         styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Numéro</th>
+      <th>Solution</th>
+      <th>État</th>
+      <th>Date Prévue</th>
+      <th>Date Réelle</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-v>
+    <tr>
+      <td>{{ v.numeroVersion }}</td>
+      <td>{{ v.solution?.nom }}</td>
+      <td><span [class]="'badge badge-' + v.etat">{{ getEtatLabel(v.etat) }}</span></td>
+      <td>{{ v.dateReleasePrevue }}</td>
+      <td>{{ v.dateReleaseReelle || '—' }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
+                (click)="openEdit(v)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm"
+                (click)="delete(v.idVersion)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr><td colspan="6" style="text-align:center">Aucune version trouvée</td></tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="showDialog"
+          [header]="editMode ? 'Modifier Version' : 'Nouvelle Version'"
+          [modal]="true" [style]="{width:'480px'}">
+  <div class="dialog-form">
+
+    <div class="field">
+      <label>Solution *</label>
+      <p-dropdown [options]="solutions"
+                  [(ngModel)]="form.solutionId"
+                  optionLabel="nom"
+                  optionValue="idSolution"
+                  placeholder="Choisir une solution"
+                  [style]="{width:'100%'}">
+      </p-dropdown>
+    </div>
+
+    <div class="field">
+      <label>Numéro de version *</label>
+      <input pInputText [(ngModel)]="form.numeroVersion" placeholder="Ex: 1.0.0" style="width:100%" />
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <input pInputText [(ngModel)]="form.description" placeholder="Description des changements" style="width:100%" />
+    </div>
+
+    <div class="field">
+      <label>État *</label>
+      <p-dropdown [options]="etats"
+                  [(ngModel)]="form.etat"
+                  optionLabel="label"
+                  optionValue="value"
+                  [style]="{width:'100%'}">
+      </p-dropdown>
+    </div>
+
+    <div class="field">
+      <label>Date Release Prévue *</label>
+      <input type="date" [(ngModel)]="form.dateReleasePrevue" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+    </div>
+
+    <div class="field">
+      <label>Date Release Réelle</label>
+      <input type="date" [(ngModel)]="form.dateReleaseReelle" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+    </div>
+
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Annuler" class="p-button-text" (click)="showDialog=false"></button>
+    <button pButton label="Enregistrer" (click)="save()"></button>
+  </ng-template>
+</p-dialog>

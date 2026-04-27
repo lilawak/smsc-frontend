@@ -1,0 +1,66 @@
+<div class="page-header">
+  <h2 class="page-title">Gestion des Clients</h2>
+  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+</div>
+
+<p-table [value]="clients" [paginator]="true" [rows]="10"
+         styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Téléphone</th>
+      <th>Secteur</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-c>
+    <tr>
+      <td>{{ c.nom }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.telephone }}</td>
+      <td>{{ c.secteur }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
+                (click)="openEdit(c)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm"
+                (click)="delete(c.idClient)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr><td colspan="5" style="text-align:center">Aucun client trouvé</td></tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="showDialog"
+          [header]="editMode ? 'Modifier Client' : 'Nouveau Client'"
+          [modal]="true" [style]="{width:'450px'}">
+  <div class="dialog-form">
+    <div class="field">
+      <label>Nom *</label>
+      <input pInputText [(ngModel)]="form.nom" placeholder="Nom complet" />
+    </div>
+    <div class="field">
+      <label>Email *</label>
+      <input pInputText [(ngModel)]="form.email" placeholder="email@exemple.com" />
+    </div>
+    <div class="field">
+      <label>Téléphone</label>
+      <input pInputText [(ngModel)]="form.telephone" placeholder="+212 6xx xxx xxx" />
+    </div>
+    <div class="field">
+      <label>Secteur</label>
+      <input pInputText [(ngModel)]="form.secteur" placeholder="Ex: Finance, IT..." />
+    </div>
+    <div class="field">
+      <label>Notes</label>
+      <input pInputText [(ngModel)]="form.notes" placeholder="Notes..." />
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Annuler" class="p-button-text" (click)="showDialog=false"></button>
+    <button pButton label="Enregistrer" (click)="save()"></button>
+  </ng-template>
+</p-dialog>
+

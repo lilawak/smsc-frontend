@@ -1,0 +1,101 @@
+<div class="page-header">
+  <h2 class="page-title">Gestion des Planifications</h2>
+  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+</div>
+
+<p-table [value]="planifications" [paginator]="true" [rows]="10"
+         styleClass="p-datatable-striped" [tableStyle]="{'width':'100%'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Titre</th>
+      <th>Client</th>
+      <th>Version / Solution</th>
+      <th>Date Commande</th>
+      <th>Livraison Prévue</th>
+      <th>Livraison Réelle</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-p>
+    <tr>
+      <td>{{ p.titre }}</td>
+      <td>{{ p.client?.nom }}</td>
+      <td>{{ p.version?.numeroVersion }} — {{ p.version?.solution?.nom }}</td>
+      <td>{{ p.dateCommande || '—' }}</td>
+      <td>{{ p.dateLivraisonPrevue || '—' }}</td>
+      <td>{{ p.dateLivraisonReelle || '—' }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
+                (click)="openEdit(p)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm"
+                (click)="delete(p.idPlanification)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr><td colspan="7" style="text-align:center">Aucune planification trouvée</td></tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="showDialog"
+          [header]="editMode ? 'Modifier Planification' : 'Nouvelle Planification'"
+          [modal]="true" [style]="{width:'480px'}">
+  <div class="dialog-form">
+
+    <div class="field">
+      <label>Titre *</label>
+      <input pInputText [(ngModel)]="form.titre"
+             placeholder="Titre de la planification" style="width:100%" />
+    </div>
+
+    <div class="field">
+      <label>Client *</label>
+      <p-dropdown [options]="clients"
+                  [(ngModel)]="form.clientId"
+                  optionLabel="nom"
+                  optionValue="idClient"
+                  placeholder="Choisir un client"
+                  [style]="{width:'100%'}">
+      </p-dropdown>
+    </div>
+
+    <div class="field">
+      <label>Version *</label>
+        <p-dropdown [options]="versions"
+                    [(ngModel)]="form.versionId"
+                    optionValue="idVersion"
+                    placeholder="Choisir une version"
+                    [style]="{width:'100%'}">
+          <ng-template pTemplate="selectedItem" let-v>
+            {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
+          </ng-template>
+          <ng-template pTemplate="item" let-v>
+            {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
+          </ng-template>
+        </p-dropdown>
+    </div>
+
+    <div class="field">
+      <label>Date de Commande</label>
+      <input type="date" [(ngModel)]="form.dateCommande"
+             style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+    </div>
+
+    <div class="field">
+      <label>Date Livraison Prévue</label>
+      <input type="date" [(ngModel)]="form.dateLivraisonPrevue"
+             style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+    </div>
+
+    <div class="field">
+      <label>Date Livraison Réelle</label>
+      <input type="date" [(ngModel)]="form.dateLivraisonReelle"
+             style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+    </div>
+
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Annuler" class="p-button-text" (click)="showDialog=false"></button>
+    <button pButton label="Enregistrer" (click)="save()"></button>
+  </ng-template>
+</p-dialog>
