@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 
@@ -11,7 +12,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  constructor(private router: Router) {}
+
+  isLoginPage(): boolean {
+    return this.router.url === '/login';
   }
 }

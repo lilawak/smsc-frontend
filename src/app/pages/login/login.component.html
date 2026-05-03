@@ -1,0 +1,38 @@
+<div class="login-wrapper">
+  <div class="login-left">
+    <div class="brand-content">
+      <div class="logo-icon">
+        <img src="logo.svg" alt="Binarios Logo" width="110" />
+      </div>
+      <h1 class="brand-name">Binarios</h1>
+      <p class="brand-sub">by T2S GROUP</p>
+      <div class="divider"></div>
+      <p class="app-description">Système de Management<br>des Solutions Clients</p>
+    </div>
+    <p class="copyright">© 2026 Binarios — T2S GROUP</p>
+  </div>
+
+  <div class="login-right">
+    <div class="form-container">
+      <h2>Bienvenue</h2>
+      <p class="subtitle">Connectez-vous à votre espace</p>
+
+      <div class="field">
+        <label>Nom d'utilisateur</label>
+        <input pInputText [(ngModel)]="username" placeholder="Votre identifiant" />
+      </div>
+
+      <div class="field">
+        <label>Mot de passe</label>
+        <input pInputText type="password" [(ngModel)]="password" placeholder="••••••••" />
+      </div>
+
+      @if (errorMessage) {
+      <p class="error-msg">{{ errorMessage }}</p>
+      }
+
+      <button pButton [label]="loading ? 'Connexion...' : 'Se connecter'"
+              [disabled]="loading" (click)="login()" class="login-btn"></button>
+    </div>
+  </div>
+</div>
