@@ -16,7 +16,12 @@ export interface Planification {
 export class PlanificationService {
   private api = 'https://smsc-backend-production.up.railway.app/api/planifications';
   constructor(private http: HttpClient) {}
-  getAll(): Observable<Planification[]> { return this.http.get<Planification[]>(this.api); }
+  getAll(days?: number): Observable<Planification[]> {
+    if (days) {
+      return this.http.get<Planification[]>(`${this.api}?days=${days}`);
+    }
+    return this.http.get<Planification[]>(this.api);
+  }
   getById(id: number): Observable<Planification> { return this.http.get<Planification>(`${this.api}/${id}`); }
   create(p: Planification): Observable<Planification> { return this.http.post<Planification>(this.api, p); }
   update(id: number, p: Planification): Observable<Planification> { return this.http.put<Planification>(`${this.api}/${id}`, p); }

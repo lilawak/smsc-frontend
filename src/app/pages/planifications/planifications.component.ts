@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { PlanificationService } from '../../services/planification.service';
@@ -14,7 +15,7 @@ import { VersionService, Version } from '../../services/version.service';
   selector: 'app-planifications',
   standalone: true,
   imports: [CommonModule, FormsModule, TableModule, ButtonModule,
-    InputTextModule, DialogModule, DropdownModule],
+    InputTextModule,InputNumberModule, DialogModule, DropdownModule],
   templateUrl: './planifications.component.html',
   styleUrl: './planifications.component.css'
 })
@@ -25,6 +26,8 @@ export class PlanificationsComponent implements OnInit {
   showDialog = false;
   editMode = false;
   selectedId: number | null = null;
+  daysInput: number | null = null;
+
 
   form = {
     titre:               '',
@@ -47,8 +50,11 @@ export class PlanificationsComponent implements OnInit {
     this.versionService.getAll().subscribe((d: any[]) => this.versions = d);
   }
 
+
+
   load() {
-    this.planificationService.getAll().subscribe((data: any[]) => this.planifications = data);
+    this.planificationService.getAll(this.daysInput ?? undefined)
+      .subscribe((data: any[]) => this.planifications = data);
   }
 
   openNew() {

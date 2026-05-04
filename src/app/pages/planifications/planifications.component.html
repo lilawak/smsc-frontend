@@ -1,6 +1,20 @@
 <div class="page-header">
   <h2 class="page-title">Gestion des Planifications</h2>
-  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+  <div class="header-actions">
+    <div class="filter-group">
+      <p-inputNumber
+        [(ngModel)]="daysInput"
+        placeholder="Nombre de jours"
+        [useGrouping]="false"
+        [max]="365"
+        [style]="{width:'100px', marginRight:'110px'}">
+      </p-inputNumber>
+      <button pButton label="Filtrer"  (click)="load()"></button>
+      <button pButton label="Tout afficher"  (click)="daysInput = null; load()"></button>
+    </div>
+    <button pButton label="+ Ajouter" (click)="openNew()"></button>
+  </div>
+
 </div>
 
 <p-table [value]="planifications" [paginator]="true" [rows]="10"
