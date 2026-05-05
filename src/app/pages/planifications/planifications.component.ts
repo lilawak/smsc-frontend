@@ -26,7 +26,7 @@ export class PlanificationsComponent implements OnInit {
   showDialog = false;
   editMode = false;
   selectedId: number | null = null;
-  daysInput: number | null = null;
+  daysInput: number | null = 30;
 
 
   form = {
