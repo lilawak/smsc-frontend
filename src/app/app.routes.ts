@@ -6,10 +6,12 @@ import { VersionsComponent } from './pages/versions/versions.component';
 import { PlanificationsComponent } from './pages/planifications/planifications.component';
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import {NavbarComponent} from './layout/navbar/navbar.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'login',           component: LoginComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {path: 'navbar',           component:  NavbarComponent ,        canActivate: [authGuard] },
   { path: 'dashboard',       component: DashboardComponent,       canActivate: [authGuard] },
   { path: 'clients',         component: ClientsComponent,         canActivate: [authGuard] },
   { path: 'solutions',       component: SolutionsComponent,       canActivate: [authGuard] },
