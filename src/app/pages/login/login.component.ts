@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../services/auth.service';
+import {InactivityService} from '../../services/inactivity.service';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +20,12 @@ export class LoginComponent {
   errorMessage = '';
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router , private inactivityService: InactivityService) {}
 
   login() {
     this.loading = true;
     this.errorMessage = '';
+    this.inactivityService.startWatching();
     this.authService.login(this.username, this.password).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: () => {
@@ -32,4 +34,5 @@ export class LoginComponent {
       }
     });
   }
+
 }

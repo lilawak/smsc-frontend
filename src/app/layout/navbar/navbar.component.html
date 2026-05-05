@@ -1,6 +1,6 @@
-<nav class="navbar">
+<nav class="navbar" xmlns="http://www.w3.org/1999/html">
   <div class="navbar-brand">
-    <span class="brand-icon"><img src="https://t2s.group/wp-content/uploads/2024/04/logo-1.png" alt="T2S Group" width="75" ></span>
+    <span class="brand-icon"><a href="https://t2s.group/"  target="_blank"> <img src="https://t2s.group/wp-content/uploads/2024/04/logo-1.png" alt="T2S Group" width="75" ></a></span>
   </div>
   <div class="navbar-links">
     <a routerLink="/planifications" routerLinkActive="active">Planifications</a>
@@ -8,6 +8,14 @@
     <a routerLink="/clients" routerLinkActive="active">Clients</a>
     <a routerLink="/solutions" routerLinkActive="active">Solutions</a>
     <a routerLink="/versions" routerLinkActive="active">Versions</a>
+    <button pButton icon="pi pi-sign-out"
+            class="p-button-rounded p-button-text p-button-danger"
+            pTooltip="LogOut"
+            tooltipPosition="bottom"
+            tooltipStyle ="{'font-size': '1px', 'padding': '3px 7px'}"
+            (click)="logout()"
+            >
+    </button>
 
   </div>
 </nav>

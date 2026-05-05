@@ -10,11 +10,12 @@ import {NavbarComponent} from './layout/navbar/navbar.component';
 
 export const routes: Routes = [
   { path: 'login',           component: LoginComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '',                redirectTo: 'login', pathMatch: 'full' },
   {path: 'navbar',           component:  NavbarComponent ,        canActivate: [authGuard] },
   { path: 'dashboard',       component: DashboardComponent,       canActivate: [authGuard] },
   { path: 'clients',         component: ClientsComponent,         canActivate: [authGuard] },
   { path: 'solutions',       component: SolutionsComponent,       canActivate: [authGuard] },
   { path: 'versions',        component: VersionsComponent,        canActivate: [authGuard] },
   { path: 'planifications',  component: PlanificationsComponent,  canActivate: [authGuard] },
+  {path: '**',               redirectTo: 'login', },
 ];

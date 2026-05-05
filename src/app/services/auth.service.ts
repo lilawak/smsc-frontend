@@ -14,10 +14,11 @@ export class AuthService {
 
   private apiUrl = 'https://smsc-backend-production.up.railway.app/api/auth';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+  }
 
   login(username: string, password: string) {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { username, password }).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, {username, password}).pipe(
       tap(res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('username', res.username);
@@ -37,9 +38,5 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
-  }
-
-  getUsername(): string {
-    return localStorage.getItem('username') ?? '';
   }
 }
