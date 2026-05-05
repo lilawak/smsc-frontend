@@ -4,11 +4,12 @@ import { ClientService } from '../../services/client.service';
 import { SolutionService } from '../../services/solution.service';
 import { VersionService } from '../../services/version.service';
 import { PlanificationService } from '../../services/planification.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule , RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

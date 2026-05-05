@@ -20,11 +20,20 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border-top: 4px solid;
 }
+.stat-card:hover {
+  background: white;
+  border-radius: 30px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 0 5px  #003366;
+  border-top: 2px solid;
+  outline-: 4px solid #003366;
+
+}
+
 
 .stat-card.blue  { border-color: #003366; }
-.stat-card.green { border-color: #003366; }
-.stat-card.orange{ border-color: #003366; }
-.stat-card.red   { border-color: #003366; }
+
 
 .stat-icon   { font-size: 36px; margin-bottom: 12px; }
 .stat-number { font-size: 40px; font-weight: 700; color: #1a1a2e; }
