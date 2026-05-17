@@ -48,7 +48,13 @@ export class VersionsComponent implements OnInit {
     { label: 'En test',          value: 'EN_TEST' },
     { label: 'Livré',            value: 'LIVRE'   },
     { label: 'Archivé',          value: 'ARCHIVE' },
-    { label: 'resente',          value: 'LIVRE_RESENTE' },
+  ];
+
+  // Separate list for the filter dropdown — includes the virtual DERNIERE option.
+  // We keep it out of `etats` so it never appears in the "create/edit" form.
+  filterEtatOptions = [
+    ...this.etats,
+    { label: ' Dernière version', value: 'DERNIERE' },
   ];
 
   constructor(
@@ -151,5 +157,11 @@ export class VersionsComponent implements OnInit {
 
   getEtatLabel(value: string): string {
     return this.etats.find(e => e.value === value)?.label || value;
+  }
+
+  // Returns extra CSS classes for the row's badge cell.
+  // A "dernière version" row shows its normal état badge PLUS a star badge.
+  isDerniereVersion(v: any): boolean {
+    return v.derniereVersion === true;
   }
 }
