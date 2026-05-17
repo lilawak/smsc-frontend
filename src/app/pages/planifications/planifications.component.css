@@ -1,7 +1,13 @@
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.page-header    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
-.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group   { display: flex; align-items: center; gap: 8px; }
+
 .dialog-form { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; }
-.field { display: flex; flex-direction: column; gap: 6px; }
+.field       { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 13px; font-weight: 600; color: #555; }
 .field input { width: 100%; }
+
+/* Version status badges shown in the table */
+.badge           { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-derniere  { background: #dcfce7; color: #166534; }
+.badge-ancienne  { background: #ffedd5; color: #9a3412; }

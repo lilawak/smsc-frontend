@@ -2,19 +2,30 @@
   <h2 class="page-title">Gestion des Planifications</h2>
   <div class="header-actions">
     <div class="filter-group">
+
+      <p-dropdown
+        [options]="versionFilterOptions"
+        [(ngModel)]="versionFilter"
+        optionLabel="label"
+        optionValue="value"
+        [style]="{width:'190px'}">
+      </p-dropdown>
+      <!-- Filter by number of days -->
       <p-inputNumber
         [(ngModel)]="daysInput"
         placeholder="Nombre de jours"
         [useGrouping]="false"
-        [max]="365"
-        [style]="{width:'100px', marginRight:'110px'}">
+        [max]="365">
       </p-inputNumber>
-      <button pButton label="Filtrer"  (click)="load()"></button>
-      <button pButton label="Tout afficher"  (click)="daysInput = null; load()"></button>
+
+
+
+      <button pButton label="Filtrer"       (click)="load()"></button>
+      <button pButton label="Tout afficher" (click)="resetFilters()"></button>
     </div>
+
     <button pButton label="+ Ajouter" (click)="openNew()"></button>
   </div>
-
 </div>
 
 <p-table [value]="planifications" [paginator]="true" [rows]="10"
@@ -24,6 +35,7 @@
       <th>Titre</th>
       <th>Client</th>
       <th>Version / Solution</th>
+      <th>Statut version</th>
       <th>Date Commande</th>
       <th>Livraison Prévue</th>
       <th>Livraison Réelle</th>
@@ -35,7 +47,11 @@
       <td>{{ p.titre }}</td>
       <td>{{ p.client?.nom }}</td>
       <td>{{ p.version?.numeroVersion }} — {{ p.version?.solution?.nom }}</td>
-      <td>{{ p.dateCommande || '—' }}</td>
+      <td>
+        <span *ngIf="p.version?.derniereVersion === true"  class="badge badge-derniere">Dernière</span>
+        <span *ngIf="p.version?.derniereVersion !== true"  class="badge badge-ancienne">Antérieure</span>
+      </td>
+      <td>{{ p.dateCommande        || '—' }}</td>
       <td>{{ p.dateLivraisonPrevue || '—' }}</td>
       <td>{{ p.dateLivraisonReelle || '—' }}</td>
       <td>
@@ -47,10 +63,11 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
-    <tr><td colspan="7" style="text-align:center">Aucune planification trouvée</td></tr>
+    <tr><td colspan="8" style="text-align:center">Aucune planification trouvée</td></tr>
   </ng-template>
 </p-table>
 
+<!-- ── Dialog ────────────────────────────────────────────────── -->
 <p-dialog [(visible)]="showDialog"
           [header]="editMode ? 'Modifier Planification' : 'Nouvelle Planification'"
           [modal]="true" [style]="{width:'480px'}">
@@ -75,18 +92,18 @@
 
     <div class="field">
       <label>Version *</label>
-        <p-dropdown [options]="versions"
-                    [(ngModel)]="form.versionId"
-                    optionValue="idVersion"
-                    placeholder="Choisir une version"
-                    [style]="{width:'100%'}">
-          <ng-template pTemplate="selectedItem" let-v>
-            {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
-          </ng-template>
-          <ng-template pTemplate="item" let-v>
-            {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
-          </ng-template>
-        </p-dropdown>
+      <p-dropdown [options]="versions"
+                  [(ngModel)]="form.versionId"
+                  optionValue="idVersion"
+                  placeholder="Choisir une version"
+                  [style]="{width:'100%'}">
+        <ng-template pTemplate="selectedItem" let-v>
+          {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
+        </ng-template>
+        <ng-template pTemplate="item" let-v>
+          {{ v?.numeroVersion }} — {{ v?.solution?.nom }}
+        </ng-template>
+      </p-dropdown>
     </div>
 
     <div class="field">
@@ -109,7 +126,7 @@
 
   </div>
   <ng-template pTemplate="footer">
-    <button pButton label="Annuler" class="p-button-text" (click)="showDialog=false"></button>
-    <button pButton label="Enregistrer" (click)="save()"></button>
+    <button pButton label="Annuler"      class="p-button-text" (click)="showDialog=false"></button>
+    <button pButton label="Enregistrer"  (click)="save()"></button>
   </ng-template>
 </p-dialog>

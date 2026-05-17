@@ -15,19 +15,35 @@ import { VersionService, Version } from '../../services/version.service';
   selector: 'app-planifications',
   standalone: true,
   imports: [CommonModule, FormsModule, TableModule, ButtonModule,
-    InputTextModule,InputNumberModule, DialogModule, DropdownModule],
+    InputTextModule, InputNumberModule, DialogModule, DropdownModule],
   templateUrl: './planifications.component.html',
   styleUrl: './planifications.component.css'
 })
 export class PlanificationsComponent implements OnInit {
+
+  // Full list returned by the backend (never mutated after load)
+  private allPlanifications: any[] = [];
+
+  // What the table actually displays — filtered view
   planifications: any[] = [];
+
   clients: Client[] = [];
   versions: Version[] = [];
   showDialog = false;
-  editMode = false;
+  editMode   = false;
   selectedId: number | null = null;
+
+  // ── Filters ──────────────────────────────────────────────────
   daysInput: number | null = 30;
 
+  // 'all' | 'derniere' | 'ancienne'
+  versionFilter: string = 'all';
+
+  versionFilterOptions = [
+    { label: 'Toutes les versions', value: 'all'      },
+    { label: 'Dernière version',    value: 'derniere'  },
+    { label: 'Version antérieure',  value: 'ancienne'  },
+  ];
 
   form = {
     titre:               '',
@@ -50,19 +66,42 @@ export class PlanificationsComponent implements OnInit {
     this.versionService.getAll().subscribe((d: any[]) => this.versions = d);
   }
 
-
+  // ── Load & filter ─────────────────────────────────────────────
 
   load() {
     this.planificationService.getAll(this.daysInput ?? undefined)
-      .subscribe((data: any[]) => this.planifications = data);
+      .subscribe((data: any[]) => {
+        this.allPlanifications = data;
+        this.applyVersionFilter();
+      });
   }
+
+  applyVersionFilter() {
+    if (this.versionFilter === 'derniere') {
+      this.planifications = this.allPlanifications
+        .filter(p => p.version?.derniereVersion === true);
+    } else if (this.versionFilter === 'ancienne') {
+      this.planifications = this.allPlanifications
+        .filter(p => p.version?.derniereVersion !== true);
+    } else {
+      this.planifications = [...this.allPlanifications];
+    }
+  }
+
+  resetFilters() {
+    this.daysInput     = null;
+    this.versionFilter = 'all';
+    this.load();
+  }
+
+  // ── CRUD ──────────────────────────────────────────────────────
 
   openNew() {
     this.form = {
       titre: '', clientId: null, versionId: null,
       dateCommande: '', dateLivraisonPrevue: '', dateLivraisonReelle: ''
     };
-    this.editMode = false;
+    this.editMode  = false;
     this.selectedId = null;
     this.showDialog = true;
   }
@@ -70,19 +109,18 @@ export class PlanificationsComponent implements OnInit {
   openEdit(p: any) {
     this.form = {
       titre:               p.titre,
-      clientId:            p.client?.idClient ?? null,
+      clientId:            p.client?.idClient   ?? null,
       versionId:           p.version?.idVersion ?? null,
-      dateCommande:        p.dateCommande ?? '',
+      dateCommande:        p.dateCommande        ?? '',
       dateLivraisonPrevue: p.dateLivraisonPrevue ?? '',
       dateLivraisonReelle: p.dateLivraisonReelle ?? ''
     };
-    this.editMode = true;
+    this.editMode   = true;
     this.selectedId = p.idPlanification;
     this.showDialog = true;
   }
 
   save() {
-    // Validation
     if (!this.form.titre.trim()) {
       alert('Veuillez saisir un titre');
       return;
@@ -96,7 +134,6 @@ export class PlanificationsComponent implements OnInit {
       return;
     }
 
-    // Payload propre — SANS clientId et versionId
     const payload = {
       titre:               this.form.titre,
       client:              { idClient:  this.form.clientId  },
@@ -106,11 +143,9 @@ export class PlanificationsComponent implements OnInit {
       dateLivraisonReelle: this.form.dateLivraisonReelle || null
     };
 
-    console.log('Payload envoyé :', JSON.stringify(payload));
-
     if (this.editMode && this.selectedId) {
       this.planificationService.update(this.selectedId, payload as any).subscribe({
-        next: () => { this.load(); this.showDialog = false; },
+        next:  () => { this.load(); this.showDialog = false; },
         error: (err) => {
           console.error('Erreur:', err);
           alert('Erreur : ' + (err.error?.message || JSON.stringify(err.error)));
@@ -118,7 +153,7 @@ export class PlanificationsComponent implements OnInit {
       });
     } else {
       this.planificationService.create(payload as any).subscribe({
-        next: () => { this.load(); this.showDialog = false; },
+        next:  () => { this.load(); this.showDialog = false; },
         error: (err) => {
           console.error('Erreur:', err);
           alert('Erreur : ' + (err.error?.message || JSON.stringify(err.error)));
