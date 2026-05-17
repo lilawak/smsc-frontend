@@ -1,6 +1,35 @@
 <div class="page-header">
   <h2 class="page-title">Gestion des Versions</h2>
-  <button pButton label="+ Ajouter" (click)="openNew()"></button>
+  <div class="header-actions">
+    <div class="filter-group">
+
+      <!-- Filter by Solution -->
+      <p-dropdown
+        [options]="solutions"
+        [(ngModel)]="filterSolutionObj"
+        optionLabel="nom"
+        placeholder="Solution"
+        [showClear]="true"
+        [style]="{width:'160px'}">
+      </p-dropdown>
+
+      <!-- Filter by État -->
+      <p-dropdown
+        [options]="etats"
+        [(ngModel)]="filterEtat"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="État"
+        [showClear]="true"
+        [style]="{width:'150px'}">
+      </p-dropdown>
+
+      <button pButton label="Filtrer"       (click)="load()"></button>
+      <button pButton label="Tout afficher" (click)="resetFilters()"></button>
+    </div>
+
+    <button pButton label="+ Ajouter" (click)="openNew()"></button>
+  </div>
 </div>
 
 <p-table [value]="versions" [paginator]="true" [rows]="10"
@@ -35,6 +64,7 @@
   </ng-template>
 </p-table>
 
+<!-- ── Dialog ────────────────────────────────────────────────── -->
 <p-dialog [(visible)]="showDialog"
           [header]="editMode ? 'Modifier Version' : 'Nouvelle Version'"
           [modal]="true" [style]="{width:'480px'}">
@@ -73,12 +103,14 @@
 
     <div class="field">
       <label>Date Release Prévue *</label>
-      <input type="date" [(ngModel)]="form.dateReleasePrevue" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+      <input type="date" [(ngModel)]="form.dateReleasePrevue"
+             style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
     </div>
 
     <div class="field">
       <label>Date Release Réelle</label>
-      <input type="date" [(ngModel)]="form.dateReleaseReelle" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+      <input type="date" [(ngModel)]="form.dateReleaseReelle"
+             style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
     </div>
 
   </div>

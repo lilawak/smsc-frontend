@@ -25,6 +25,14 @@ export class VersionsComponent implements OnInit {
   editMode = false;
   selectedId: number | null = null;
 
+  // ── Filter state ──────────────────────────────────────────────
+  filterSolutionNom: string | null = null;   // nom of the selected solution
+  filterEtat:        string | null = null;
+
+  // Used by the solution filter dropdown — stores the whole Solution object
+  // so we can extract .nom for the API call
+  filterSolutionObj: Solution | null = null;
+
   form = {
     solutionId:         null as number | null,
     numeroVersion:      '',
@@ -40,6 +48,7 @@ export class VersionsComponent implements OnInit {
     { label: 'En test',          value: 'EN_TEST' },
     { label: 'Livré',            value: 'LIVRE'   },
     { label: 'Archivé',          value: 'ARCHIVE' },
+    { label: 'resente',          value: 'LIVRE_RESENTE' },
   ];
 
   constructor(
@@ -52,10 +61,22 @@ export class VersionsComponent implements OnInit {
     this.solutionService.getAll().subscribe((d: Solution[]) => this.solutions = d);
   }
 
+  // ── Load with optional filters ────────────────────────────────
   load() {
-    this.versionService.getAll().subscribe((data: any[]) => this.versions = data);
+    const solutionNom = this.filterSolutionObj?.nom ?? null;
+    const etat        = this.filterEtat;
+
+    this.versionService.getAll(solutionNom, etat)
+      .subscribe((data: any[]) => this.versions = data);
   }
 
+  resetFilters() {
+    this.filterSolutionObj = null;
+    this.filterEtat        = null;
+    this.load();
+  }
+
+  // ── CRUD ──────────────────────────────────────────────────────
   openNew() {
     this.form = {
       solutionId: null, numeroVersion: '', description: '',
@@ -81,7 +102,6 @@ export class VersionsComponent implements OnInit {
   }
 
   save() {
-    // Validation
     if (!this.form.solutionId) {
       alert('Veuillez choisir une solution');
       return;
@@ -95,7 +115,6 @@ export class VersionsComponent implements OnInit {
       return;
     }
 
-    // Payload propre — exactement ce que Spring Boot attend
     const payload = {
       solution:          { idSolution: this.form.solutionId },
       numeroVersion:     this.form.numeroVersion,
@@ -104,8 +123,6 @@ export class VersionsComponent implements OnInit {
       dateReleasePrevue: this.form.dateReleasePrevue,
       dateReleaseReelle: this.form.dateReleaseReelle || null
     };
-
-    console.log('Payload envoyé :', JSON.stringify(payload));
 
     if (this.editMode && this.selectedId) {
       this.versionService.update(this.selectedId, payload as any).subscribe({
